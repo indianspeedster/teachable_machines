@@ -256,9 +256,11 @@ print("ssh root@%s" % public_ip)
 - **Choose Image Project**: Select the "Image Project" option from the project choices available on the Teachable Machine homepage and then pick standard image model from the pop up.
 
 ![Choose Project](./images/project.png)
+
 - **Setting Up Categories & Adding Datasets**: Set up the categories or classes you want the model to recognize. Provide a label name for each category. You can also add upto any number of labels. For adding the data You can either use images from your computer or capture images directly using your webcam.
 
 - **Training the Model**: Once your dataset is uploaded, click the "Train Model" button to start the training process. Teachable Machine will use the images you provided to train the model in the browser.
+
 ![Model Training](./images/train.png)
 
 - **Monitoring Training Progress**: During training, you can click on Under the hood button and see the progress of the training process, including the loss and accuracy metrics.
@@ -266,7 +268,7 @@ print("ssh root@%s" % public_ip)
 
 - **Exporting the Model**: Once you are satisfied with the performance of your model, you can export it in different formats, such as TensorFlow.js, TensorFlow Lite, or a URL. Here in our case we will be using quantized version of Tensorflow lite. Once you click on download model, it will take some 2-3 minutes to get downloaded and then a zip file would be downloaded which contains a tflite model and a label.txt file that contains the label name.
 
-![Export Model](./images/train.png)
+![Export Model](./images/export.png)
 
 :::
 
