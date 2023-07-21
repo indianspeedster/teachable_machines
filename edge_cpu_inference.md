@@ -1,18 +1,19 @@
 ::: {.cell .markdown}
-# Using edge devices for CPU-based inference
+# Building image classification models and using them on edge devices
 
 :::
 
 
 ::: {.cell .markdown}
 
-Machine learning models are most often trained in the "cloud", on powerful centralized servers with specialized resources (like GPU acceleration) for training machine learning models. 
+Traditionally, training image classification models requires a deep understanding of complex algorithms and programming languages. It is a significant barrier for individuals who are just starting or have limited coding experience.
 
+However, this process of building an Image classification model can be made codeless through the help of [Teachable Machines](https://teachablemachine.withgoogle.com/). Teachable Machines is a user-friendly and intuitive platform developed by Google that allows anyone, regardless of their coding experience, to create custom image classification models with ease.
 
-However, for a variety of reasons including privacy, latency, and network connectivity or bandwidth constraints, it is often preferable to *use* these models (i.e. do inference) at "edge" devices located wherever the input data is/where the model's prediction is going to be used. 
+With Teachable Machines, you can train your own image classifier by simply providing examples of the objects or categories you want to recognize. You can use your webcam or upload images to create your custom dataset. The platform then takes care of the complex algorithms and training process behind the scenes, making it accessible to beginners and experts alike.
 
+In this experiment, we will explore how to create various types of image classification models using Teachable Machines. Afterwards, we will apply these models to make predictions on Edge devices.
 
-These edge devices are less powerful and typically lack any special acceleration, so the inference time (the time from when the input is fed to the model, until the model outputs its prediction) may not be as fast as it would be on a cloud server - but we avoid having to send the input data to the cloud and then sending the prediction back.
 
 :::
 
@@ -22,8 +23,9 @@ This notebook assumes you already have a "lease" available for a device on the C
 
 * launch a "container" on that device
 * attach an IP address to the container, so that you can access it over SSH
+* train and download an image classification model on Teachable machines. 
 * transfer files to and from the container
-* use a pre-trained image classification model to do inference on the edge device
+* use the trained image classification model to do inference on the edge device
 * delete the container
 
 :::
@@ -88,19 +90,6 @@ lease_id ="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 ::: {.cell .markdown}
 
 Now, we are ready to launch a container!
-
--   **Container** : A container is like a logical "box" that holds everything needed to run an application. It includes the application itself, along with all the necessary prerequisite software, files, and settings it needs to work properly. 
--   **Image** : An image is like a pre-packaged "starting point" for a container. On CHI@Edge, we can use any image that is built for the ARM64 architecture - e.g. anything on [this list](https://hub.docker.com/search?type=image&architecture=arm64&q=). In this example, we're going to run a machine learning application written in Python, so we will use the `python:3.9-slim` image as a starting point for our container. This is a lightweight installation of the Debian Linux operating system with Python pre-installed.
-
-When we create the container, we could also specify some additional arguments: 
-
--   `workdir`: the "working directory" - location in the container's filesystem from which any commands we specify will run.
--   `exposed_ports`: if we run any applications inside the container that need to accept incoming requests from a network, we will need to export a "port" number for those incoming requests. Any requests to that port number will be forwarded to this container.
--   `command`: if we want to execute a specific command immediately on starting the container, we can specify that as well.
-
-For this particular experiment, we'll specify that port 22 - which is used for SSH access - should be exposed. 
-
-Also, since we do not specify a `command` to run, we will further specify `interactive = True` - that it should open an interactive Python session - otherwise the container will immediately stop after it is started, because it has no "work" to do.
 
 :::
 
@@ -253,6 +242,33 @@ print("ssh root@%s" % public_ip)
 ```
 :::
 
+
+::: {.cell .markdown}
+## Train and download an image classification model on Teachable machines
+
+### The following are the steps involved to train an Image classification model on Teachable machine.
+
+
+- **Access Teachable Machine**: Visit the Teachable Machine website at https://teachablemachine.withgoogle.com to access the platform and click on Get Started.
+
+![Home Page](./images/tm_launch.png)
+
+- **Choose Image Project**: Select the "Image Project" option from the project choices available on the Teachable Machine homepage and then pick standard image model from the pop up.
+
+![Choose Project](./images/project.png)
+- **Setting Up Categories & Adding Datasets**: Set up the categories or classes you want the model to recognize. Provide a label name for each category. You can also add upto any number of labels. For adding the data You can either use images from your computer or capture images directly using your webcam.
+
+- **Training the Model**: Once your dataset is uploaded, click the "Train Model" button to start the training process. Teachable Machine will use the images you provided to train the model in the browser.
+![Model Training](./images/train.png)
+
+- **Monitoring Training Progress**: During training, you can click on Under the hood button and see the progress of the training process, including the loss and accuracy metrics.
+
+
+- **Exporting the Model**: Once you are satisfied with the performance of your model, you can export it in different formats, such as TensorFlow.js, TensorFlow Lite, or a URL. Here in our case we will be using quantized version of Tensorflow lite. Once you click on download model, it will take some 2-3 minutes to get downloaded and then a zip file would be downloaded which contains a tflite model and a label.txt file that contains the label name.
+
+![Export Model](./images/train.png)
+
+:::
 
 ::: {.cell .markdown}
 ## Transfering files to the container
