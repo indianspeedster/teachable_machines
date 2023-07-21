@@ -53,7 +53,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if not args.model_path or not args.image_path or not args.labels_path:
-        print("Warning: Must provide all model path, image path and label file path must be provided.")
+        print("Warning: Must provide all model path, image path and label file path.")
         sys.exit(1)
     prediction, labels = predict(args.model_path, args.image_path, args.labels_path)
     j,i = prediction[0]
