@@ -83,7 +83,7 @@ Fill in the lease ID inside the quotation marks in the following cell, then run 
 
 ::: {.cell .code}
 ``` python
-lease_id ="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx"
+lease_id ="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx"
 ```
 :::
 
