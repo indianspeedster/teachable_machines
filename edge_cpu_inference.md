@@ -249,40 +249,47 @@ print("ssh root@%s" % public_ip)
 ### The following are the steps involved to train an Image classification model on Teachable machine.
 
 
-- **Access Teachable Machine**: Visit the Teachable Machine website at https://teachablemachine.withgoogle.com to access the platform and click on Get Started.
+- **Access Teachable Machine**: Visit the Teachable Machine website at https://teachablemachine.withgoogle.com to access the platform , the platform looks similar to this and then click on Get Started.
 
-![Home Page](./images/tm_launch.png)
+![**Home Page**](./images/tm_launch.png)
 
-- **Choose Image Project**: Select the "Image Project" option from the project choices available on the Teachable Machine homepage and then pick standard image model from the pop up.
+- **Choose Image Project**: On the Teachable Machine homepage, you'll see various project choices. Select the "Image Project" option, as we are training an image classification model.
 
-![Choose Project](./images/project.png)
+![**Choose Project**](./images/project.png)
 
-- **Setting Up Categories & Adding Datasets**: Set up the categories or classes you want the model to recognize. Provide a label name for each category. You can also add upto any number of labels. For adding the data You can either use images from your computer or capture images directly using your webcam.
+- **Setting Up Categories & Add Datasets**: Define the categories or classes you want your model to recognize. For example, if you're building a model to classify animals, you might create categories like "cat," "dog," and "bird." Assign a label to each category, which will be displayed during the training process. You can either use images stored on your computer or capture images directly using your webcam if you prefer to create a dataset on the fly.
 
-- **Training the Model**: Once your dataset is uploaded, click the "Train Model" button to start the training process. Teachable Machine will use the images you provided to train the model in the browser.
+- **Training the Model**: After uploading your dataset, click the "Train Model" button. Teachable Machine will begin the training process using the images you provided. The platform uses a pre-trained model (Mobilenetv2) and fine-tunes it on your custom dataset.
 
-![Model Training](./images/train.png)
+![**Model Training**](./images/train.png)
 
-- **Monitoring Training Progress**: During training, you can click on Under the hood button and see the progress of the training process, including the loss and accuracy metrics.
+- **Monitoring Training Progress**: During the training process, you can click on Under the hood button and observe the progress of the model's training. Teachable Machine will display the training loss and accuracy metrics, allowing you to track how well the model is learning to classify the images.
 
 
 - **Exporting the Model**: Once you are satisfied with the performance of your model, you can export it in different formats, such as TensorFlow.js, TensorFlow Lite, or a URL. Here in our case we will be using quantized version of Tensorflow lite. Once you click on download model, it will take some 2-3 minutes to get downloaded and then a zip file would be downloaded which contains a tflite model and a label.txt file that contains the label name.
 
-![Export Model](./images/export.png)
+![**Export Model**](./images/export.png)
+
+- **Uploading the model on Jupyter hub**: Once you've completed the download of the model, the next step is to unzip the downloaded file. After unzipping, you'll have both the model and label files ready. Now, it's time to upload these files onto Jupyter Hub.
+Assuming you've already followed the initial instructions and cloned the repository, you'll find a folder named "image_model" within it. Access this folder, and you'll see an upload button(Marked in red in the image below). Simply click on it and proceed to upload both the model and label files to Jupyter Hub. This action will make the files readily available for further use and analysis.
+
+![**Upload**](./images/export.png)
+
 
 :::
 
 ::: {.cell .markdown}
 ## Transfering files to the container
 
-Later in this notebook, we'll run an image classification model - a model that accepts an image as input and "predicts" the name of the object in the image - inside the container. To do this, we'll need to upload some files to the container:
+The next step is to transfer the image_model folder to the container.
+Below mentioned are all contained in the `image_model` directory:
 
-* an already-trained model
+* Image classification model trained by teachable machine
 * a list of labels - this maps the integer values "predicted" by the model to human readable object names
-* a sample image
+* a sample image (Which will be used for making prediction)
 * and Python code to load the model and make a prediction on the image
 
-These are all contained in the `image_model` directory. We can upload them to the container using the `container.upload` function, and specify the source directory (in the Jupyter environment) and destination directory (on the container).
+We can upload them to the container using the `container.upload` function, and specify the source directory (in the Jupyter environment) and destination directory (on the container).
 
 
 :::
@@ -296,23 +303,7 @@ container.upload(my_container.uuid, "./image_model", "/root/image_model")
 
 
 ::: {.cell .markdown}
-## Use a pre-trained image classification model to do inference
-
-Now, we can use the model we uploaded to the container, and do inference - make a prediction - *on* the container. 
-
-
-In this example, we will use a machine learning model that is specifically designed for inference on resource-constrained edge devices. In general, there are several strategies to reduce inference time on edge devices:
-
-* **Model design**: models meant for inference on edge devices are often designed specifically to reduce memory and/or inference time. The model in this example is a MobileNet, which like many image classification models uses a *convolution* operation to process its input, but MobileNets use a kind of convolution that is much faster and requires fewer operations than a "standard" convolution.
-* **Model Compression**: another approach to faster inference on edge devices is model compression, a group of techniques that try to reduce the size of the model without affecting its accuracy. The model in this example is a quantized model, which means that the numeric parameters in the model are represented using fewer bits than in a "standard" model. These quantized parameters can also be processed using faster mathematical operations, potentially improving the inference time.
-* **Hardware Acceleration**: a third popular technique to improving inference time at the edge is with hardware acceleration - using specialized computer chips, GPUs, or TPUs that can perform the operations involved in inference very fast. In this example, though, we are going to use CPU-based inference, which means that there is no hardware acceleration.
-
-
---- 
-
-> For more information about these strategies, see:
-> J. Chen and X. Ran, "Deep Learning With Edge Computing: A Review," in Proceedings of the IEEE, vol. 107, no. 8, pp. 1655-1674, Aug. 2019, doi: 10.1109/JPROC.2019.2921977. https://ieeexplore.ieee.org/document/8763885 
-
+## Use the image classification model by Teachable machine to do inference
 
 :::
 
@@ -333,7 +324,7 @@ container.execute(my_container.uuid, 'pip install tflite-runtime Pillow')
 
 ::: {.cell .markdown}
 
-Then, we can execute the machine learning model! We will ask it to make a prediction for the following image:
+Then, we can run the image classification model! We will ask it to make a prediction for the following image:
 
 :::
 
@@ -354,7 +345,7 @@ print(result['output'])
 
 ::: {.cell .markdown}
 
-Make a note of the time it took to generate the prediction - would this inference time be acceptable for all applications? Also make a note of the model's three best "guesses" regarding the label of the image - is the prediction accurate?
+Make a note of the time it took to generate the prediction - would this inference time be acceptable for all applications?
 
 :::
 
