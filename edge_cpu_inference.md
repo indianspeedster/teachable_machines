@@ -206,27 +206,27 @@ print("ssh root@%s" % public_ip)
 
 -   **Access Teachable Machine**: Visit the Teachable Machine website at https://teachablemachine.withgoogle.com to access the platform , the platform looks similar to this and then click on Get Started.
 
-![**Home Page**](./images/tm_launch.png)
+![](./images/tm_launch.png)
 
 -   **Choose Image Project**: On the Teachable Machine homepage, you'll see various project choices. Select the "Image Project" option, as we are training an image classification model.
 
-![**Choose Project**](./images/project.png)
+![](./images/project.png)
 
 -   **Setting Up Categories & Add Datasets**: Define the categories or classes you want your model to recognize. For example, if you're building a model to classify animals, you might create categories like "cat," "dog," and "bird." Assign a label to each category, which will be displayed during the training process. You can either use images stored on your computer or capture images directly using your webcam if you prefer to create a dataset on the fly.
 
 -   **Training the Model**: After uploading your dataset, click the "Train Model" button. Teachable Machine will begin the training process using the images you provided. The platform uses a pre-trained model (Mobilenetv2) and fine-tunes it on your custom dataset.
 
-![**Model Training**](./images/train.png)
+![](./images/train.png)
 
 -   **Monitoring Training Progress**: During the training process, you can click on Under the hood button and observe the progress of the model's training. Teachable Machine will display the training loss and accuracy metrics, allowing you to track how well the model is learning to classify the images.
 
--   **Exporting the Model**: Once you are satisfied with the performance of your model, you can export it in different formats, such as TensorFlow.js, TensorFlow Lite, or a URL. Here in our case we will be using quantized version of Tensorflow lite. Once you click on download model, it will take some 2-3 minutes to get downloaded and then a zip file would be downloaded which contains a tflite model and a label.txt file that contains the label name.
+-   **Exporting the Model**: Once you are satisfied with the performance of your model, you can export it in different formats, such as TensorFlow.js, TensorFlow Lite, or a URL. Here in our case we will be using quantized version of Tensorflow lite. Once you click on download my model, it will take some 2-3 minutes to get downloaded and then a zip file would be downloaded which contains a tflite model and a label.txt file that contains the label name.
 
-![**Export Model**](./images/export.png)
+![](./images/export.png)
 
 -   **Uploading the model on Jupyter hub**: Once you've completed the download of the model, the next step is to unzip the downloaded file. After unzipping, you'll have both the model and label files ready. Now, it's time to upload these files onto Jupyter Hub. Assuming you've already followed the initial instructions and cloned the repository, you'll find a folder named "image_model" within it. Access this folder, and you'll see an upload button(Marked in red in the image below). Simply click on it and proceed to upload both the model and label files to Jupyter Hub. This action will make the files readily available for further use and analysis.
 
-![**Upload Model on Jupyter hub**](./images/upload.png)
+![](./images/upload.png)
 :::
 
 ::: {.cell .markdown}
