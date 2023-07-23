@@ -277,9 +277,15 @@ Image('image_model/parrot.jpg')
 ```
 :::
 
+::: {.cell .markdown}
+To make the prediction we need to pass the model_file name, Image_name which we want to do prediction and the name of the file that contains the labels of the model
+
+:::
+
+
 ::: {.cell .code}
 ``` python
-result = container.execute(my_container.uuid, 'python /root/image_model/model.py')
+result = container.execute(my_container.uuid, 'python /root/image_model/model.py model_path image_name labelfile_name')
 print(result['output'])
 ```
 :::
